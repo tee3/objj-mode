@@ -31,23 +31,22 @@
              '(objj-acorn "^\\(WARNING\\|ERROR\\) line \\([0-9]+\\) in file:\\([^:]+\\):\\(.*\\)$" 3 2))
 (add-to-list 'compilation-error-regexp-alist 'objj-acorn)
 
-(eval-after-load "flycheck.el"
-  (progn
-    (require 'flycheck)
+(when (require 'flycheck nil t)
+  (eval-after-load "flycheck.el"
+    (progn
+      (flycheck-define-checker objj-capp-lint
+                               "A flycheck checker for Objective-J based on capp_lint."
+                               :command
+                               ("capp_lint" source)
+                               :error-patterns
+                               ((warning line-start line ": " (message) "." line-end))
+                               :modes
+                               (objj-mode))
 
-    (flycheck-define-checker objj-capp-lint
-                             "A flycheck checker for Objective-J based on capp_lint."
-                             :command
-                             ("capp_lint" source)
-                             :error-patterns
-                             ((warning line-start line ": " (message) "." line-end))
-                             :modes
-                             (objj-mode))
+      (add-to-list 'flycheck-checkers 'objj-capp-lint)
 
-    (add-to-list 'flycheck-checkers 'objj-capp-lint)
-
-    (add-hook 'objj-mode-hook (lambda ()
-                                (flycheck-select-checker 'objj-capp-lint)))))
+      (add-hook 'objj-mode-hook (lambda ()
+                                  (flycheck-select-checker 'objj-capp-lint))))))
 
 (provide 'objj-mode)
 ;; objj-mode.el ends here
