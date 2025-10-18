@@ -1,5 +1,6 @@
 ;;; objj-mode --- An Objective-J mode for Emacs.
 
+;; Keywords: javascript, tools
 ;; Package-Version: 1.0
 
 ;;; Commentary:
